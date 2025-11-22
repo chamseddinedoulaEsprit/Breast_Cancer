@@ -1,0 +1,21 @@
+le projet dédié pour qui ?? médecin ,radiolyse …
+en anglais
+x ray et prise de sang  
+les bo's en mode storytelling 
+il a une tumeur ou non 
+les bo's débute avec un verbe d'action -> phrase affirmative
+nzidou des colonne
+modeling:
+la liste des modèles 
+la liste des variables appliquées 
+la liste des paramètres et l'hyperparamètres  
+on peux faire une segmentation avant la classification
+
+1/BU
+1.1/ probleme statement
+1.2/les bo's
+1.3/les dso's 
+2/DU
+3/DP 
+lazem n7awlou nafhmou el metier mliiii7 bech najmou na5thou el discision finale 3la les données ba3ed l'interprétation de data understanding
+ 
