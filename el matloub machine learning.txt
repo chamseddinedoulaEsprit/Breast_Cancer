@@ -11,6 +11,9 @@ la liste des variables appliquées
 la liste des paramètres et l'hyperparamètres  
 on peux faire une segmentation avant la classification
 
+
+
+
 1/BU
 1.1/ probleme statement
 1.2/les bo's
