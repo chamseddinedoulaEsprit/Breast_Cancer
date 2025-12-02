@@ -707,6 +707,24 @@ else:
     plt.show()
 
 
+# In[53]:
+
+
+
+# Compute mean values by diagnosis
+mean_df = df.groupby("diagnosis").mean().T
+
+# Create a copy to mark max values
+highlighted_df = mean_df.copy()
+
+# Mark max values in each row with '**' (or any symbol) to indicate max
+for col in highlighted_df.columns:
+    max_val = highlighted_df[col].max()
+    highlighted_df[col] = highlighted_df[col].apply(lambda x: f"**{x}**" if x == max_val else x)
+
+print(highlighted_df)
+
+
 # # 📝 Interpretation: Statistical Normality Assessment
 # 
 # ---
