@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-user-shield"></i> Dashboard - Administrator
+        </h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users"></i> Users</h5>
+                <h2>{{ total_users }}</h2>
+                <a href="{{ url_for('admin_users') }}" class="btn btn-light btn-sm">
+                    Manage <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-chart-line"></i> Predictions</h5>
+                <h2>{{ total_predictions }}</h2>
+                <small>Total performed</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-brain"></i> Models</h5>
+                <h2>{{ active_models }}</h2>
+                <a href="{{ url_for('admin_models') }}" class="btn btn-light btn-sm">
+                    Manage <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-chart-bar"></i> Stats</h5>
+                <h2>95%</h2>
+                <a href="{{ url_for('admin_statistics') }}" class="btn btn-light btn-sm">
+                    View <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-list"></i> Recent Activity - UC-A3</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_predictions %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Patient name</th>
+                                <th>Prediction</th>
+                                <th>Confidence</th>
+                                <th>Risk</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pred in recent_predictions %}
+                            <tr>
+                                <td>{{ pred.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                                <td>{{ pred.patient.name }}</td>
+                                <td>
+                                    <span class="badge bg-{{ pred.get_prediction_color() }}">
+                                        {{ pred.prediction }}
+                                    </span>
+                                </td>
+                                <td>{{ (pred.probability * 100)|round(1) }}%</td>
+                                <td>
+                                    <span class="badge bg-{{ pred.get_risk_color() }}">
+                                        {{ pred.risk_level }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No recent activity</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-tasks"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{{ url_for('admin_users') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user-plus"></i> Manage Users (UC-A1)
+                    </a>
+                    <a href="{{ url_for('admin_models') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-upload"></i> Manage ML Models (UC-A2)
+                    </a>
+                    <a href="{{ url_for('admin_statistics') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-chart-pie"></i> View Statistics (UC-A3)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle"></i> System Information</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success"></i>
+                        <strong>Status:</strong> System operational
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-database text-primary"></i>
+                        <strong>Database:</strong> SQLite
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-brain text-warning"></i>
+                        <strong>Active Model:</strong> {{ active_model_name }}
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-shield-alt text-info"></i>
+                        <strong>Security:</strong> Enabled
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-user-cog"></i> User Management - UC-A1</h2>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                <i class="fas fa-user-plus"></i> Create User
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-users"></i> User List</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Registration Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td><i class="fas fa-user"></i> {{ user.name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% if user.role == 'admin' %}
+                                        <span class="badge bg-danger">Admin</span>
+                                    {% elif user.role == 'doctor' %}
+                                        <span class="badge bg-success">Doctor</span>
+                                    {% else %}
+                                        <span class="badge bg-info">Patient</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ user.created_at.strftime('%d/%m/%Y') }}</td>
+                                <td>
+                                    {% if user.id != current_user.id %}
+                                    <button class="btn btn-sm btn-danger" onclick="deleteUser({{ user.id }})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                    {% else %}
+                                    <span class="badge bg-secondary">You</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create User Modal -->
+<div class="modal fade" id="createUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="fas fa-user-plus"></i> Create New User</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createUserForm">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="userName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="userEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" id="userPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <select class="form-select" id="userRole" required>
+                            <option value="patient">Patient</option>
+                            <option value="doctor">Doctor</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="createUser()">
+                    <i class="fas fa-save"></i> Create
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function createUser() {
+    const data = {
+        name: document.getElementById('userName').value,
+        email: document.getElementById('userEmail').value,
+        password: document.getElementById('userPassword').value,
+        role: document.getElementById('userRole').value
+    };
+    
+    fetch('/admin/user/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('User created successfully!');
+        location.reload();
+    })
+    .catch(error => {
+        alert('Error creating user');
+        console.error('Error:', error);
+    });
+}
+
+function deleteUser(userId) {
+    if (confirm('Are you sure you want to delete this user?')) {
+        fetch(`/admin/user/${userId}/delete`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.error || 'Unknown error'); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('User deleted successfully!');
+            location.reload();
+        })
+        .catch(error => {
+            alert('Error deleting user: ' + error.message);
+            console.error('Error:', error);
+        });
+    }
+}
+</script>
+{% endblock %}

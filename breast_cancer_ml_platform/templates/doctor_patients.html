@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-users"></i> Patient List - UC-D1
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-list"></i> All Patient Predictions</h5>
+            </div>
+            <div class="card-body">
+                {% if predictions %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Patient</th>
+                                <th>Prediction</th>
+                                <th>Confidence</th>
+                                <th>Risk Level</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pred in predictions %}
+                            <tr>
+                                <td>{{ pred.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                                <td>
+                                    <i class="fas fa-user"></i> {{ pred.patient.name }}
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ pred.get_prediction_color() }}">
+                                        {{ pred.prediction }}
+                                    </span>
+                                </td>
+                                <td>{{ (pred.probability * 100)|round(1) }}%</td>
+                                <td>
+                                    <span class="badge bg-{{ pred.get_risk_color() }}">
+                                        {{ pred.risk_level }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('doctor_analysis', prediction_id=pred.id) }}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-microscope"></i> Analyze
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No predictions available</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-stethoscope"></i> New Prediction - UC-P1</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    Fill in the form below with your medical data. 
+                    The system will use artificial intelligence to predict if the tumor is malignant or benign.
+                </p>
+                
+                <form method="POST" action="{{ url_for('patient_predict') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row">
+                        {% for feature in feature_names %}
+                            {% if form[feature] %}
+                            <div class="col-md-6 mb-3">
+                                {{ form[feature].label(class="form-label") }}
+                                {{ form[feature](class="form-control" + (" is-invalid" if form[feature].errors else "")) }}
+                                {% if form[feature].errors %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form[feature].errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="alert alert-info mt-3">
+            <h6><i class="fas fa-info-circle"></i> Note:</h6>
+            <p class="mb-0">
+                The displayed fields depend on the AI model currently activated by the administrator.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

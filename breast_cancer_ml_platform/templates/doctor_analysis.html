@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-microscope"></i> Detailed Analysis</h2>
+            <a href="{{ url_for('doctor_patients') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+        
+        <!-- Patient Information -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-user"></i> Patient Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Patient:</strong> {{ patient.name }}</p>
+                        <p><strong>Email:</strong> {{ patient.email }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Prediction Date:</strong> {{ prediction.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                        <p><strong>Prediction ID:</strong> #{{ prediction.id }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Prediction Result -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-{{ prediction.get_prediction_color() }} text-white">
+                <h5 class="mb-0"><i class="fas fa-file-medical"></i> Prediction Result - UC-D1</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="text-muted">Diagnosis</h6>
+                                <h2 class="text-{{ prediction.get_prediction_color() }}">
+                                    {{ prediction.prediction }}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="text-muted">Confidence</h6>
+                                <h2 class="text-primary">
+                                    {{ (prediction.probability * 100)|round(1) }}%
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="text-muted">Risk Level - UC-D3</h6>
+                                <h2 class="text-{{ prediction.get_risk_color() }}">
+                                    {{ prediction.risk_level }}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Feature Importance - UC-D2 -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Feature Importance - UC-D2</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    This analysis shows the influence of each medical feature on the model's prediction.
+                    Features with higher importance had more impact on the decision.
+                </p>
+                
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Importance</th>
+                                <th>Visualization</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Concave Points Mean</strong></td>
+                                <td>29.44%</td>
+                                <td>
+                                    <div class="progress" style="height: 25px; min-width: 200px;">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 29.4%">29.4%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Perimeter Mean</strong></td>
+                                <td>16.04%</td>
+                                <td>
+                                    <div class="progress" style="height: 25px; min-width: 200px;">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 16.0%">16.0%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Area Mean</strong></td>
+                                <td>13.01%</td>
+                                <td>
+                                    <div class="progress" style="height: 25px; min-width: 200px;">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 13.0%; background-color: #e83e8c !important;">13.0%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Concavity Mean</strong></td>
+                                <td>12.77%</td>
+                                <td>
+                                    <div class="progress" style="height: 25px; min-width: 200px;">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 12.8%; background-color: #e83e8c !important;">12.8%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Radius Mean</strong></td>
+                                <td>12.41%</td>
+                                <td>
+                                    <div class="progress" style="height: 25px; min-width: 200px;">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 12.4%; background-color: #e83e8c !important;">12.4%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Texture Mean</strong></td>
+                                <td>5.7%</td>
+                                <td>
+                                    <div class="progress" style="height: 25px; min-width: 200px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 5.7%">5.7%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Compactness Mean</strong></td>
+                                <td>4.37%</td>
+                                <td>
+                                    <div class="progress" style="height: 25px; min-width: 200px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 4.4%">4.4%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Smoothness Mean</strong></td>
+                                <td>2.65%</td>
+                                <td>
+                                    <div class="progress" style="height: 25px; min-width: 200px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 2.7%">2.7%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fractal Dimension Mean</strong></td>
+                                <td>1.89%</td>
+                                <td>
+                                    <div class="progress" style="height: 25px; min-width: 200px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 1.9%">1.9%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Symmetry Mean</strong></td>
+                                <td>1.72%</td>
+                                <td>
+                                    <div class="progress" style="height: 25px; min-width: 200px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 1.7%">1.7%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="alert alert-info mt-4">
+                    <h6><i class="fas fa-lightbulb"></i> Clinical Interpretation</h6>
+                    <p class="mb-2">
+                        <strong>Top 3 most important features:</strong>
+                    </p>
+                    <ol>
+                        <li>
+                            <strong>Concave Points Mean</strong> 
+                            (29.4%) - 
+                            Impact <span class="badge bg-danger">Very High</span>
+                        </li>
+                        <li>
+                            <strong>Perimeter Mean</strong> 
+                            (16.0%) - 
+                            Impact <span class="badge bg-warning">Very High</span>
+                        </li>
+                        <li>
+                            <strong>Area Mean</strong> 
+                            (13.0%) - 
+                            Impact <span class="badge" style="background-color: #e83e8c;">High</span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Risk Stratification - UC-D3 -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-shield-alt"></i> Risk Stratification - UC-D3</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-{{ prediction.get_risk_color() }}">
+                    <h5>Risk Level: {{ prediction.risk_level }}</h5>
+                    <hr>
+                    {% if prediction.risk_level == 'Low' %}
+                        <p><strong>Recommendations:</strong></p>
+                        <ul>
+                            <li>Regular monitoring recommended</li>
+                            <li>Long-term surveillance</li>
+                            <li>Routine exams per standard protocol</li>
+                        </ul>
+                    {% elif prediction.risk_level == 'Medium' %}
+                        <p><strong>Recommendations:</strong></p>
+                        <ul>
+                            <li>Close monitoring recommended</li>
+                            <li>Additional exams advised</li>
+                            <li>Increased surveillance</li>
+                            <li>Specialist consultation recommended</li>
+                        </ul>
+                    {% else %}
+                        <p><strong>Recommendations:</strong></p>
+                        <ul>
+                            <li><strong class="text-danger">Urgent action required</strong></li>
+                            <li>Immediate oncology consultation</li>
+                            <li>In-depth exams necessary</li>
+                            <li>Complete treatment plan evaluation</li>
+                            <li>Intensive surveillance</li>
+                        </ul>
+                    {% endif %}
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h6>Confidence Score</h6>
+                        <div class="progress" style="height: 30px;">
+                            <div class="progress-bar bg-{{ prediction.get_prediction_color() }}" 
+                                 role="progressbar" 
+                                 style="width: {{ (prediction.probability * 100)|round(1) }}%">
+                                {{ (prediction.probability * 100)|round(1) }}%
+                            </div>
+                        </div>
+                        <small class="text-muted">Model confidence in prediction</small>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Clinical Priority</h6>
+                        {% if prediction.prediction == 'Malignant' %}
+                            <span class="badge bg-danger fs-5 p-3">HIGH PRIORITY</span>
+                        {% elif prediction.risk_level == 'High' %}
+                            <span class="badge bg-warning fs-5 p-3">MEDIUM PRIORITY</span>
+                        {% else %}
+                            <span class="badge bg-success fs-5 p-3">STANDARD PRIORITY</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Input Data -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="fas fa-database"></i> Input Data</h5>
+            </div>
+            <div class="card-body">
+                <pre class="bg-light p-3 rounded">{{ prediction.input_data }}</pre>
+            </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <h5 class="mb-3">Actions</h5>
+                <button class="btn btn-primary" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print Report
+                </button>
+                <a href="{{ url_for('doctor_patients') }}" class="btn btn-secondary">
+                    <i class="fas fa-users"></i> View All Patients
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

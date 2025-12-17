@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-{{ prediction.get_prediction_color() }} text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-file-medical"></i> Diagnostic Result - UC-P2
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="text-center py-4">
+                    <h2 class="mb-3">Prediction Result</h2>
+                    <div class="alert alert-{{ prediction.get_prediction_color() }} py-4">
+                        <h1 class="display-3 mb-3">
+                            {% if prediction.prediction == 'Benign' %}
+                                <i class="fas fa-check-circle"></i>
+                            {% else %}
+                                <i class="fas fa-exclamation-triangle"></i>
+                            {% endif %}
+                        </h1>
+                        <h3>{{ prediction.prediction }}</h3>
+                        <p class="lead mb-0">
+                            {% if prediction.prediction == 'Benign' %}
+                                The tumor is classified as <strong>benign</strong>
+                            {% else %}
+                                The tumor is classified as <strong>malignant</strong>
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>Model Confidence</h5>
+                                    <h2 class="text-primary">{{ (prediction.probability * 100)|round(1) }}%</h2>
+                                    <div class="progress" style="height: 30px;">
+                                        <div class="progress-bar bg-{{ prediction.get_prediction_color() }}" 
+                                             role="progressbar" 
+                                             style="width: {{ (prediction.probability * 100)|round(1) }}%">
+                                            {{ (prediction.probability * 100)|round(1) }}%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>Risk Level - UC-P3</h5>
+                                    <h2 class="text-{{ prediction.get_risk_color() }}">{{ prediction.risk_level }}</h2>
+                                    <span class="badge bg-{{ prediction.get_risk_color() }} py-2 px-4 fs-5">
+                                        {{ prediction.risk_level }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="interpretation">
+                    <h5><i class="fas fa-info-circle"></i> Interpretation</h5>
+                    {% if prediction.prediction == 'Benign' %}
+                        <div class="alert alert-success">
+                            <p class="mb-2"><strong>Good news!</strong></p>
+                            <p>
+                                The model predicted that your tumor is <strong>benign</strong> with a confidence of 
+                                <strong>{{ (prediction.probability * 100)|round(1) }}%</strong>.
+                            </p>
+                            <p class="mb-0">
+                                This means the tumor is likely not cancerous and does not spread to other parts of the body.
+                            </p>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <p class="mb-2"><strong>Attention Required</strong></p>
+                            <p>
+                                The model predicted that your tumor is <strong>malignant</strong> with a confidence of 
+                                <strong>{{ (prediction.probability * 100)|round(1) }}%</strong>.
+                            </p>
+                            <p class="mb-0">
+                                This means the tumor could be cancerous. It is important to consult a healthcare professional immediately to confirm this diagnosis and discuss treatment options.
+                            </p>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="alert alert-info mt-3">
+                        <h6><i class="fas fa-shield-alt"></i> Risk Level: {{ prediction.risk_level }}</h6>
+                        {% if prediction.risk_level == 'Low' %}
+                            <p class="mb-0">
+                                The risk level is <strong>low</strong>. Tumor characteristics suggest a low risk of aggressiveness.
+                            </p>
+                        {% elif prediction.risk_level == 'Medium' %}
+                            <p class="mb-0">
+                                The risk level is <strong>medium</strong>. Regular monitoring is recommended.
+                            </p>
+                        {% else %}
+                            <p class="mb-0">
+                                The risk level is <strong>high</strong>. Urgent medical consultation is strongly recommended.
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="explainability">
+                    <h5><i class="fas fa-eye"></i> Simplified Explainability - UC-P4</h5>
+                    <p class="text-muted">
+                        Here are the features that most influenced this prediction:
+                    </p>
+                    {# feature_importance is now passed from the view #}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>Concave Points Mean</h6>
+                                    <div class="progress" style="height: 25px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 29.4%">29.4%</div>
+                                    </div>
+                                    <small class="text-muted">Importance in decision</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>Perimeter Mean</h6>
+                                    <div class="progress" style="height: 25px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 16.0%">16.0%</div>
+                                    </div>
+                                    <small class="text-muted">Importance in decision</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>Area Mean</h6>
+                                    <div class="progress" style="height: 25px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 13.0%">13.0%</div>
+                                    </div>
+                                    <small class="text-muted">Importance in decision</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>Concavity Mean</h6>
+                                    <div class="progress" style="height: 25px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 12.8%">12.8%</div>
+                                    </div>
+                                    <small class="text-muted">Importance in decision</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>Radius Mean</h6>
+                                    <div class="progress" style="height: 25px;">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 12.4%">12.4%</div>
+                                    </div>
+                                    <small class="text-muted">Importance in decision</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="text-center">
+                    <a href="{{ url_for('patient_predict') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> New Prediction
+                    </a>
+                    <a href="{{ url_for('patient_history') }}" class="btn btn-secondary">
+                        <i class="fas fa-history"></i> View History
+                    </a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                <small>Prediction made on {{ prediction.created_at.strftime('%d/%m/%Y at %H:%M') }}</small>
+            </div>
+        </div>
+        
+        <div class="alert alert-warning">
+            <h6><i class="fas fa-exclamation-triangle"></i> Important Warning</h6>
+            <p class="mb-0">
+                This result is provided by an artificial intelligence system for assistance purposes only. 
+                It does not replace a professional medical diagnosis. Please consult a qualified doctor for 
+                a complete evaluation and definitive diagnosis.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
