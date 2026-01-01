@@ -1,76 +1,81 @@
-# 🏥 Plateforme de Diagnostic ML - Cancer du Sein
+
+---
+
+# 🏥 ML Diagnostic Platform – Breast Cancer
 
 ## 📄 Description
 
-Ce projet vise à améliorer la détection précoce du cancer du sein en utilisant des techniques de Machine Learning (ML) et de Deep Learning (DL). Il propose une solution complète allant de l'analyse exploratoire des données à une application web interactive pour les patients, les médecins et les administrateurs.
+This project aims to improve the early detection of breast cancer using **Machine Learning (ML)** and **Deep Learning (DL)** techniques. It provides a complete solution ranging from exploratory data analysis to an interactive web application designed for patients, doctors, and administrators.
 
-Les méthodes traditionnelles (biopsies) étant parfois lentes et coûteuses, cette plateforme permet d'analyser rapidement les caractéristiques cellulaires issues de la méthode FNA (Fine Needle Aspiration) pour fournir une aide au diagnostic fiable.
+Traditional methods (such as biopsies) can be slow and costly. This platform enables rapid analysis of cellular characteristics obtained through the **FNA (Fine Needle Aspiration)** method to deliver reliable diagnostic support.
 
-## 📂 Structure du Projet
+## 📂 Project Structure
 
-Le répertoire est organisé en deux parties principales :
+The repository is organized into two main parts:
 
-### 1. Analyse et Modélisation (Racine)
+### 1. Analysis and Modeling (Root Directory)
 
-* **`BreastCancer.ipynb`** & **`MLProject.ipynb`** : Notebooks Jupyter contenant l'analyse exploratoire des données (EDA), le pré-traitement, l'entraînement des modèles et l'évaluation des performances.
-* **`data.csv`** : Le jeu de données médicales utilisé pour l'entraînement.
-* **`saved_model/`** : Contient les modèles entraînés (ex: Keras, Joblib) prêts à être utilisés.
+* **`BreastCancer.ipynb`**: Jupyter notebook containing exploratory data analysis (EDA), data preprocessing, model training, and performance evaluation.
+* **`data.csv`**: The medical dataset used for training.
+* **`saved_model/`**: Stores trained models (e.g., Keras, Joblib) ready for deployment.
 
-### 2. Application Web (`breast_cancer_ml_platform/`)
+### 2. Web Application (`breast_cancer_ml_platform/`)
 
-Une application **Flask** complète qui déploie les modèles pour une utilisation en conditions réelles.
+A complete **Flask** application that deploys the models for real-world usage.
 
-* **`app.py`** : Point d'entrée de l'application web.
-* **`templates/`** : Interfaces utilisateurs (Dashboards Admin, Docteur, Patient).
-* **`models/`** : Modèles spécifiques utilisés par l'application web.
+* **`app.py`**: Entry point of the web application.
+* **`templates/`**: User interfaces (Admin, Doctor, and Patient dashboards).
+* **`models/`**: Models specifically used by the web application.
 
-## 🎯 Objectifs et Fonctionnalités
+## 🎯 Objectives and Features
 
-Le projet implémente 3 objectifs métiers (Business Objectives) :
+The project implements **three business objectives (BOs)**:
 
-* **BO-1 : Détection Rapide** - Prédiction automatique (Malin/Bénin) avec une haute précision.
-* **BO-2 : Explicabilité** - Transparence des prédictions pour aider à la décision médicale (Feature Importance).
-* **BO-3 : Stratification des Risques** - Classification des niveaux de risque (Faible, Moyen, Élevé) pour prioriser les soins.
+* **BO-1: Rapid Detection** – Automatic prediction (Malignant / Benign) with high accuracy.
+* **BO-2: Explainability** – Prediction transparency to support medical decision-making (Feature Importance).
+* **BO-3: Risk Stratification** – Classification of risk levels (Low, Medium, High) to prioritize patient care.
 
-### Rôles Utilisateurs
+### User Roles
 
-* **👤 Patient** : Soumettre ses données médicales, consulter son diagnostic simplifié et son niveau de risque.
-* **👨‍⚕️ Médecin** : Accéder aux prédictions détaillées, analyser l'importance des caractéristiques cliniques et gérer les dossiers patients.
-* **🛠️ Admin** : Gérer les utilisateurs, superviser les modèles ML et la sécurité du système.
+* **👤 Patient**: Submit medical data, view a simplified diagnosis and risk level.
+* **👨‍⚕️ Doctor**: Access detailed predictions, analyze clinical feature importance, and manage patient records.
+* **🛠️ Admin**: Manage users, supervise ML models, and ensure system security.
 
-## 🚀 Installation et Démarrage
+## 🚀 Installation and Getting Started
 
-### Prérequis
+### Prerequisites
 
 * Python 3.8+
 * pip
 
-### Lancer l'Application Web
+### Running the Web Application
 
-1. Accédez au dossier de la plateforme :
+1. Navigate to the platform directory:
 
    ```bash
    cd breast_cancer_ml_platform
    ```
 
-2. Installez les dépendances nécessaires :
+2. Install the required dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Lancez le serveur :
+3. Start the server:
 
    ```bash
    python app.py
    ```
 
-   L'application sera accessible via : <http://localhost:5000>
+   The application will be available at: [http://localhost:5000](http://localhost:5000)
 
-### Explorer les Notebooks
+### Exploring the Notebooks
 
-Pour visualiser l'analyse de données et le processus d'entraînement, ouvrez `BreastCancer.ipynb`  directement dans VS Code ou Jupyter.
+To explore the data analysis and training process, open `BreastCancer.ipynb` directly in VS Code or Jupyter.
 
-## 👥 Auteurs
+## 👥 Authors
 
-* Doula Chamseddine
+* **Doula Chamseddine**
+
+---
